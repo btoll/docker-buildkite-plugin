@@ -71,14 +71,12 @@ init_default='on'
 mount_agent_default='on'
 mount_ssh_agent=''
 pwd_default="$PWD"
-workdir_default="/workdir"
 
 # Set operating system specific defaults
 if is_windows ; then
   tty_default=''
   init_default=''
   mount_agent_default=''
-  workdir_default="C:\\workdir"
   # escaping /C is a necessary workaround for an issue with Git for Windows 2.24.1.2
   # https://github.com/git-for-windows/git/issues/2442
   pwd_default="$(cmd.exe //C "echo %CD%")"
@@ -109,15 +107,8 @@ if plugin_read_list_into_result BUILDKITE_PLUGIN_DOCKER_TMPFS ; then
   done
 fi
 
-workdir=''
-
-if [[ -n "${BUILDKITE_PLUGIN_DOCKER_WORKDIR:-}" ]] || [[ "${BUILDKITE_PLUGIN_DOCKER_MOUNT_CHECKOUT:-on}" =~ ^(true|on|1)$ ]] ; then
-  workdir="${BUILDKITE_PLUGIN_DOCKER_WORKDIR:-$workdir_default}"
-fi
-
-# By default, mount $PWD onto $WORKDIR
-if [[ "${BUILDKITE_PLUGIN_DOCKER_MOUNT_CHECKOUT:-on}" =~ ^(true|on|1)$ ]] ; then
-  args+=( "--volume" "${pwd_default}:${workdir}" )
+if [ -n "${BUILDKITE_PLUGIN_DOCKER_MOUNT_CHECKOUT}" ] ; then
+  args+=( "--volume" "${pwd_default}:${BUILDKITE_PLUGIN_DOCKER_MOUNT_CHECKOUT}" )
 fi
 
 # Parse volumes (and deprecated mounts) and add them to the docker args
@@ -148,8 +139,8 @@ if plugin_read_list_into_result BUILDKITE_PLUGIN_DOCKER_SYSCTLS ; then
 fi
 
 # Set workdir if one is provided or if the checkout is mounted
-if [[ -n "${workdir:-}" ]] || [[ "${BUILDKITE_PLUGIN_DOCKER_MOUNT_CHECKOUT:-on}" =~ ^(true|on|1)$ ]]; then
-  args+=("--workdir" "${workdir}")
+if [ -n "${BUILDKITE_PLUGIN_DOCKER_WORKDIR}" ]; then
+  args+=("--workdir" "${BUILDKITE_PLUGIN_DOCKER_WORKDIR}")
 fi
 
 # Support docker run --user

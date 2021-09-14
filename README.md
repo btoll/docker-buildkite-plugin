@@ -103,18 +103,6 @@ steps:
             - "/var/run/docker.sock:/var/run/docker.sock"
 ```
 
-You can disable the default behaviour of mounting in the checkout to `workdir`:
-
-```yml
-steps:
-  - command: "npm start"
-    plugins:
-      - docker#v3.8.0:
-          image: "node:7"
-          always-pull: true
-          mount-checkout: false
-```
-
 ## Configuration
 
 ### Required
@@ -209,11 +197,9 @@ See [Docker's documentation](https://docs.docker.com/engine/reference/run/#speci
 
 Default: `true` for Linux and macOS, `false` for Windows.
 
-### `mount-checkout` (optional, boolean)
+### `mount-checkout` (optional, string)
 
-Whether to automatically mount the current working directory which contains your checked out codebase. Mounts onto `/workdir`, unless `workdir` is set, in which case that will be used.
-
-Default: `true`
+Whether to automatically mount the current working directory which contains your checked out codebase.
 
 ### `mount-buildkite-agent` (optional, boolean)
 
@@ -297,7 +283,7 @@ Example: `[ "/tmp", "/root/.cache" ]`
 
 ### `workdir`(optional, string)
 
-The working directory to run the command in, inside the container. The default is `/workdir`. This path is also used by `mount-checkout` to determine where to mount the checkout in the container.
+The working directory to run the command in, inside the container.
 
 Example: `/app`
 
