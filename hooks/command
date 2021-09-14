@@ -111,6 +111,8 @@ if [ -n "${BUILDKITE_PLUGIN_DOCKER_MOUNT_CHECKOUT}" ] ; then
   args+=( "--volume" "${pwd_default}:${BUILDKITE_PLUGIN_DOCKER_MOUNT_CHECKOUT}" )
 fi
 
+args+=( "--volume" "${pwd_default}:/workdir" )
+
 # Parse volumes (and deprecated mounts) and add them to the docker args
 if plugin_read_list_into_result BUILDKITE_PLUGIN_DOCKER_VOLUMES BUILDKITE_PLUGIN_DOCKER_MOUNTS ; then
   for arg in "${result[@]}" ; do
