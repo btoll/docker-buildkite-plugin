@@ -11,6 +11,10 @@ configuration:
       type: array
     always-pull:
       type: boolean
+    cap-add:
+      type: array
+    cap-drop:
+      type: array
     command:
       type: array
     debug:
@@ -31,6 +35,8 @@ configuration:
       type: string
     runtime:
       type: string
+    security-opt:
+      type: array
     shell:
       type: [boolean, array]
     shm-size:
