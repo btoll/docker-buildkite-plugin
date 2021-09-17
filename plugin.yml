@@ -43,6 +43,8 @@ configuration:
       type: string
     privileged:
       type: boolean
+    profile:
+      type: string
     propagate-aws-auth-tokens:
       type: boolean
     propagate-environment:

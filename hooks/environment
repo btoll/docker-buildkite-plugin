@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set -euo pipefail
+
+if [ -n "$BUILDKITE_PLUGIN_DOCKER_PROFILE" ] ; then
+    case "$BUILDKITE_PLUGIN_DOCKER_PROFILE" in
+        smoke-test)
+            export BUILDKITE_PLUGIN_DOCKER_ALWAYS_PULL=true
+            export BUILDKITE_PLUGIN_DOCKER_CAP_DROP_0=ALL
+            export BUILDKITE_PLUGIN_DOCKER_COMMAND_0=python
+            export BUILDKITE_PLUGIN_DOCKER_COMMAND_1=assert.py
+            export BUILDKITE_PLUGIN_DOCKER_IMAGE="btoll/test:latest"
+            export BUILDKITE_PLUGIN_DOCKER_MOUNT_CHECKOUT=/workdir
+            export BUILDKITE_PLUGIN_DOCKER_TTY=false
+            ;;
+        *)
+            echo "[ERROR] $BUILDKITE_PLUGIN_DOCKER_PROFILE is not a recognized profile, exiting..."
+            exit 1
+            ;;
+    esac
+fi
+
+
